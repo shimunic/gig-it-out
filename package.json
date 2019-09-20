@@ -1,0 +1,40 @@
+{
+  "name": "gig-it-out",
+  "version": "1.0.0",
+  "description": "Playlists for upcoming gigs",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shimunic/gig-it-out.git"
+  },
+  "keywords": [
+    "music",
+    "gigs",
+    "playlists"
+  ],
+  "author": "shimunic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shimunic/gig-it-out/issues"
+  },
+  "homepage": "https://github.com/shimunic/gig-it-out#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "express-ejs-layouts": "^2.5.0",
+    "express-session": "^1.16.2",
+    "mongoose": "^5.7.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "unirest": "^0.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.2"
+  }
+}
