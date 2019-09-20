@@ -1,17 +1,78 @@
 const express = require('express');
+const ip = require('ip');
+const unirest = require('unirest');
+const fetch = require('node-fetch');
 
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+
+const apiReq = unirest('GET', 'https://community-songkick.p.rapidapi.com/events.json');
+const rapidapi = 'https://community-songkick.p.rapidapi.com/events.json';
 // Load User model
 const User = require('../models/User');
-const { forwardAuthenticated } = require('../config/auth');
+const { ensureAuthenticated, forwardAuthenticated } = require('../config/auth');
 
 // Login Page
 router.get('/login', forwardAuthenticated, (req, res) => res.render('login'));
 
 // Register Page
 router.get('/register', forwardAuthenticated, (req, res) => res.render('register'));
+
+// Get gigs
+router.get('/gigs', ensureAuthenticated, async (req, res) => {
+  apiReq.query({
+    location: 'ip:185.132.198.9',
+    apikey: 'io09K9l3ebJxmxe2',
+  });
+
+  apiReq.headers({
+    'x-rapidapi-host': 'community-songkick.p.rapidapi.com',
+    'x-rapidapi-key': '57bd0f548cmsh5eba061f28d43d3p1b8a9ajsn0e99d213d149',
+  });
+
+  const finalLinks = [];
+  const finalObj = {};
+  apiReq.end(async (resp) => {
+    const artistsNames = [];
+    const artistsIDs = [];
+    if (resp.error) throw new Error(resp.error);
+
+    const upcomingEvents = resp.body.resultsPage.results.event;
+
+    upcomingEvents.forEach((e) => {
+      artistsNames.push(e.performance[0].displayName.replace(/\s+/g, '+'));
+    }); 
+    // .replace(/(.)/g, '+')
+
+    for (let i = 0; i < artistsNames.length; i++) {
+      const res = await fetch(encodeURI(`https://music.yandex.ru/handlers/music-search.jsx?text=${artistsNames[i]}`));
+      const json = await res.json();
+      json.artists.items[0] ? artistsIDs.push(json.artists.items[0].id) : null;
+    }
+    // artistsIDs.push(json.artists.items[0].id)
+    // artistsNames.forEach((e) => {
+
+    //   // const data = respo.json();
+    //   // artistsIDs.push(data.artists.items[0].id);
+    //   });
+    for (let i = 0; i < artistsIDs.length; i++) {
+      finalLinks.push(`https://music.yandex.ru/artist/${artistsIDs[i]}`);
+    }
+    console.log(finalLinks);
+    finalObj.array = finalLinks;
+    console.log(finalObj);
+    res.render('gigs', { finalObj });
+  });
+
+  // console.log(upcoming.resultsPage);
+
+  // apiReq.end((response) => {
+  //   if (response.error) throw new Error(response.error);
+
+  //   console.log(response.body);
+  // });
+});
 
 // Register
 router.post('/register', (req, res) => {
