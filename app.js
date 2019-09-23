@@ -13,7 +13,7 @@ require('./config/passport')(passport);
 // Connect to MongoDB
 mongoose
   .connect(
-    'mongodb+srv://shimunic%40gmail.com:35335kagdilishkI%26%29@cluster0-zsqfy.mongodb.net/test?retryWrites=true&w=majority',
+    'mongodb+srv://shimshim:WucyRr5rBiaNnRcn@cluster0-zsqfy.mongodb.net/test?retryWrites=true&w=majority',
     { useNewUrlParser: true, useUnifiedTopology: true },
 
   )
