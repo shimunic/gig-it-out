@@ -22,7 +22,7 @@ router.get('/register', forwardAuthenticated, (req, res) => res.render('register
 // Get gigs
 router.get('/gigs', ensureAuthenticated, async (req, res) => {
   apiReq.query({
-    location: 'ip:185.132.198.9',
+    location: `ip:${ip.address()}`,
     apikey: 'io09K9l3ebJxmxe2',
   });
 
